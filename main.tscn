@@ -1,0 +1,57 @@
+[gd_scene load_steps=9 format=3 uid="uid://bld8mrt511wgt"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_bdvch"]
+[ext_resource type="PackedScene" uid="uid://bqwsid83uttir" path="res://flyer.tscn" id="2_ftu7y"]
+[ext_resource type="PackedScene" uid="uid://dc4dmmmydenju" path="res://walker.tscn" id="3_mqmd7"]
+[ext_resource type="PackedScene" uid="uid://dcar6xb2uuboq" path="res://player.tscn" id="3_rs7nb"]
+[ext_resource type="PackedScene" uid="uid://bob58w3lpyr64" path="res://hud.tscn" id="4_yo5f0"]
+[ext_resource type="PackedScene" uid="uid://dosylpdg0o2nv" path="res://parallax_background.tscn" id="5_4akf3"]
+[ext_resource type="AudioStream" uid="uid://dwavf4vkkmumc" path="res://sound/death.wav" id="8_y6q3s"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ugxog"]
+a = Vector2(320, -16)
+b = Vector2(112, -16)
+
+[node name="Main" type="Node"]
+script = ExtResource("1_bdvch")
+mobs = Array[PackedScene]([ExtResource("2_ftu7y"), ExtResource("3_mqmd7")])
+
+[node name="ParallaxBackground2" parent="." instance=ExtResource("5_4akf3")]
+
+[node name="Player" parent="." instance=ExtResource("3_rs7nb")]
+position = Vector2(140, 521)
+
+[node name="MobTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(160, 521)
+
+[node name="HUD" parent="." instance=ExtResource("4_yo5f0")]
+
+[node name="FlyerSpawner" type="Marker2D" parent="."]
+position = Vector2(1160, 376)
+
+[node name="WalkerSpawner" type="Marker2D" parent="."]
+position = Vector2(1160, 600)
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(-24, 616)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(-32, 16)
+shape = SubResource("SegmentShape2D_ugxog")
+one_way_collision = true
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_y6q3s")
+
+[connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]

@@ -1,0 +1,13 @@
+extends RigidBody2D
+signal die
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+    $AnimatedSprite2D.play()
+
+func _on_visible_on_screen_notifier_2d_screen_exited():
+    queue_free()
+
+func take_damage():
+    queue_free()
+    die.emit()
