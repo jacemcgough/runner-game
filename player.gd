@@ -32,8 +32,6 @@ func _process(_delta):
         if collision.get_collider().is_in_group('mobs'):
             take_damage()
 
-    print(velocity)
-
 func start(pos):
     global_position = Vector2(pos)
     velocity = Vector2.ZERO

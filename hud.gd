@@ -11,7 +11,7 @@ func show_message(text = ''):
 func show_game_over():
     show_message('Game Over')
 
-    await get_tree().create_timer(1).timeout
+    await get_tree().create_timer(2).timeout
     $StartButton.show()
 
 func update_score(score):
